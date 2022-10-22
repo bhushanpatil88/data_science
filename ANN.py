@@ -51,14 +51,6 @@ trf1 = ColumnTransformer(transformers=[
         #('mode',SimpleImputer(strategy='most_frequent'),[3])
     ],remainder='passthrough')
 
-#Encoding Categorial data -> OrdinalEncoding
-# It is used when the categories are dependent like good,bad,very_good
-from sklearn.preprocessing import OrdinalEncoder
-trf2 = ColumnTransformer(transformers=[
-        ('ordinal1',OrdinalEncoder(categories=[['Poor','Average','Good'],['A+','A','B']]),[])
-        ],remainder='passthrough')
-
-
 
 #Encoding categorial data->OneHotEncoding
 # It is used when the categories are independent of each other like male_female
@@ -90,12 +82,7 @@ pipe = Pipeline([
 X_train = pipe.fit_transform(X_train)
 X_test = pipe.transform(X_test)
 
-# Encoding the Dependent Variable
-# if the dependent variable is categorical
-from sklearn.preprocessing import LabelEncoder
-le = LabelEncoder()
-y_train = le.fit_transform(y_train)
-y_test = le.transform(y_test)
+
 
 # Importing Libraries
 import tensorflow
@@ -136,7 +123,7 @@ print(classifier.summary())
 # Compiling the model 
 classifier.compile(loss='binary_crossentropy',optimizer='Adam',metrics=['accuracy'])
 
-# Fitting model to training data with validation split of 20%
+# Fitting model to training data with validation data
 '''
 If the batch size is 1 it is  stochastics gradient descent  
 if batch size is equal to (number of rows) it is batch gradient descent
@@ -169,6 +156,8 @@ plt.plot(history.history['val_accuracy'])
 
 '''
 Keras Tuner
+
+Tune almost all the hyperparameters
 '''
 def build_mode(hp):
   classifier = Sequential()
@@ -219,6 +208,11 @@ accuracy_score(y_test, y_pred)
 plt.plot(history.history['loss'])
 plt.plot(history.history['val_loss'])
 
+
+'''
+Cross Vqalidating Batch Size and Epochs for 
+Better accuracy
+'''
 # Batch_size and epochs
 
 def build():    
