@@ -53,7 +53,24 @@ from xgboost import XGBClassifier
 classifier = XGBClassifier()
 classifier.fit(X_train, y_train)
 
-from sklearn.metrics import confusion_matrix, accuracy_score
-cm = confusion_matrix(y_test, y_pred)
-print(cm)
-accuracy_score(y_test, y_pred)
+from sklearn.metrics import confusion_matrix, classification_report, plot_confusion_matrix,accuracy_score
+
+
+def eval_metric(model, X_train, y_train, X_test, y_test):
+    y_train_pred = model.predict(X_train)
+    y_pred = model.predict(X_test)
+    
+    print("Test_Set")
+    print("confussion matrix")
+    print(confusion_matrix(y_test, y_pred))
+    print(classification_report(y_test, y_pred))
+    print()
+    print("Train_Set")
+    print("confussion matrix")
+    print(confusion_matrix(y_train, y_train_pred))
+    print(classification_report(y_train, y_train_pred))
+    print()
+    dt_acc_score = accuracy_score(y_test, y_pred)
+    print("Accuracy of DecisionTreeClassifier:",dt_acc_score*100,'\n')
+
+eval_metric(classifier, X_train, y_train, X_test, y_test)

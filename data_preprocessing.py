@@ -28,7 +28,10 @@ df.drop_duplicates(inplace=True)
 df.drop(["Name","Ticket"],axis=1,inplace=True)
 
 
-
+#Fillna for categorial data with mode
+#Use oneHotEncoding
+categorical_list = ["sex", "cp", "fbs", "restecg", "exng", "slp", "caa", "thall"]
+df = pd.get_dummies(df, columns = categorical_list, drop_first = True)
 
 
 #Doning the train test split
