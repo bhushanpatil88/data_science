@@ -2,8 +2,8 @@ import numpy as np
 import matplotlib.pyplot as plt
 import pandas as pd
 import seaborn as sns
-from sklearn.compose import ColumnTransformer
-from sklearn.pipeline import Pipeline
+from sklearn.compose import ColumnTransformer,make_column_transformer
+from sklearn.pipeline import Pipeline,make_pipeline
 
 #To see the pipeline
 from sklearn import set_config
@@ -27,12 +27,25 @@ df.drop_duplicates(inplace=True)
 #Removing string data
 df.drop(["Name","Ticket"],axis=1,inplace=True)
 
+categorical_cols = []
+categorical_inds = []
+counting_cols = []
+counting_inds  = []
+cnt=0
+for i in df.columns:
+    cnt+=1
+    if df[i].nunique()<=5:
+        categorical_cols.append(i)
+        categorical_inds.append(cnt-1)
+    
 
-#Fillna for categorial data with mode
-#Use oneHotEncoding
-categorical_list = ["sex", "cp", "fbs", "restecg", "exng", "slp", "caa", "thall"]
-df = pd.get_dummies(df, columns = categorical_list, drop_first = True)
+      
+    else:
+        counting_cols.append(i)
+        counting_inds.append(cnt-1)
 
+
+    
 
 #Doning the train test split
 from sklearn.model_selection import train_test_split
@@ -66,33 +79,27 @@ trf2 = ColumnTransformer(transformers=[
 #Encoding categorial data->OneHotEncoding
 # It is used when the categories are independent of each other like male_female
 from sklearn.preprocessing import OneHotEncoder
-trf3 = ColumnTransformer(transformers=[
-    ('encoder', OneHotEncoder(drop=("first"),handle_unknown='ignore',sparse=False), [3,7])
-    ], remainder='passthrough')
+trf3 = make_column_transformer((OneHotEncoder(drop=("first"),handle_unknown='ignore',sparse=False),categorical_inds), remainder='passthrough')
 
 
 
 
 #Normalizing the data
 from sklearn.preprocessing import StandardScaler
-trf4 = ColumnTransformer(transformers=[
-    ('scaler',StandardScaler(),slice(0,10))
-    ],remainder='passthrough')
+trf4 = make_column_transformer((StandardScaler(),counting_inds),remainder='passthrough')    
 
 
 
 
 
 #creating pipeline
-pipe = Pipeline([
-    ('1',trf1),
-   ('3',trf3),
-    ('4',trf4),
-    ])
+pipe = make_pipeline(trf1,trf2,trf3,trf4)
 
 
 X_train = pipe.fit_transform(X_train)
 X_test = pipe.transform(X_test)
+
+
 
 # Encoding the Dependent Variable
 # if the dependent variable is categorical
