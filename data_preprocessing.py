@@ -54,6 +54,10 @@ X_train,X_test,y_train,y_test =train_test_split(df.drop(['Survived'],axis=1),
                                                 test_size=0.3,
                                                 random_state=101)
 
+X_train = X_train.values
+y_train = y_train.values
+X_test  = X_test.values
+y_test  = y_test.values
 
 
 #fill missing values
