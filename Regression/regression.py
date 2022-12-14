@@ -49,3 +49,15 @@ from sklearn.ensemble import RandomForestRegressor
 regressor = RandomForestRegressor(n_estimators = 10, random_state = 0)
 regressor.fit(X, y)
 regressor.predict(X_test)
+
+
+#Gradient Boost
+from sklearn.ensemble import GradientBoostingRegressor
+gb = GradientBoostingRegressor(n_estimators=100)
+gb.fit(X_train,y_train)
+y_pred = ada.predict(X_test)
+
+#XGBoost
+from xgboost import XGBRegressor
+classifier = XGBRegressor()
+classifier.fit(X_train, y_train)
