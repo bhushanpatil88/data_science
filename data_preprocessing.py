@@ -121,7 +121,9 @@ X_test = pipe.transform(X_test)
 
 
 
-# Dimension Reduction
+
+
+# Dimension Reduction methods
 # PCA
 '''
 We use PCA for finding the 
