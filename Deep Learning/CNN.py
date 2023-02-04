@@ -23,7 +23,30 @@ plt.imshow(X_train[0])
 plt.show()
 
 
+'''
+To download dataset from kaggle and unzip it
+
+from google.colab import files
+files.upload()
+!pip install kaggle
+!mkdir -p ~/.kaggle
+!cp kaggle.json ~/.kaggle/
+
+!kaggle datasets download -d salader/dogs-vs-cats
+
+import zipfile
+zip_ref = zipfile.ZipFile('/content/dogs-vs-cats.zip', 'r')
+zip_ref.extractall('/content')
+zip_ref.close()
+
+'''
+
+
 # Generators
+'''
+ Generators are useful to process large amount of data
+  It divides the data into batches so that batch by batch data is transfered to RAM
+'''
 train_ds = keras.utils.image_dataset_from_directory(
     directory='', 
     labels = 'inferred',
@@ -40,9 +63,9 @@ test_ds = keras.utils.image_dataset_from_directory(
     batch_size=32,
     image_size=(256,256)
     )
-
+#Normalize the data
 def process(image,label):
-    image = tf.case(image/256,tf.float32)
+    image = tf.cast(image/255. ,tf.float32)
     return image,label
 
 train_ds = train_ds.map(process)
